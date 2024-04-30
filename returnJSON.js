@@ -30,7 +30,7 @@ try {
                 }
             }
 
-            var sqlSelect = "SELECT ptd.id, ptd.test, ptd.lab_id, t.abbreviation, t.id AS test_id, ptd.finding, " +
+            var sqlSelect = "SELECT ptd.id, ptd.test, ptd.lab_id, t.abbreviation, t.id AS test_id, ptd.finding, ptd.patient_test_id, " +
                 "pt.test_progress_status, pt.analyzer_result, pt.analyzer_id, ptd.analyzerresult, ptd.transfer_date_time " +
                 "FROM patient_test_details ptd " +
                 "LEFT JOIN tests t ON t.id = ptd.test_id " +
@@ -50,6 +50,14 @@ try {
                 updateParams.add(labId);
                 logger.info("Patient Test Detail Updated With Result : " + result);
                 dbConn.executeUpdate(sqlUpdate, updateParams);
+
+                var sqlUpdatePatientTest = "UPDATE patient_tests SET analyzer_result = ? WHERE id = ? AND lab_id = ?";
+                var updateParamsForPatientTest = new java.util.ArrayList();
+                updateParamsForPatientTest.add(true);
+                updateParamsForPatientTest.add(parseInt(rs.getString("patient_test_id")));
+                updateParamsForPatientTest.add(labId);
+                logger.info("Patient Test Updated With ID : " + rs.getString("patient_test_id"));
+                dbConn.executeUpdate(sqlUpdatePatientTest, updateParamsForPatientTest);
             }
         }
     }
