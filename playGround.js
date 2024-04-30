@@ -12,7 +12,7 @@ try {
     var params = new java.util.ArrayList();
     params.add(analyzerName);
     params.add(labId);
-    params.add(value);  
+    params.add(value);
     params.add("Male");
 
     dbConn.executeUpdate(sql, params);
